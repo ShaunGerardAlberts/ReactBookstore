@@ -24,6 +24,32 @@ class App extends React.Component {
     })
   }
 
+  changeBookShelf = (bookChangeInfo) => {
+    // console.log(`Book : ${bookChangeInfo.bookInfo.title} : Shelf : ${bookChangeInfo.shelf} `)
+    
+    let bookToUpdate = bookChangeInfo.bookInfo
+    let desireShelf = bookChangeInfo.shelf
+    if (desireShelf === 'Want to Read') {
+      desireShelf = 'wantToRead'
+    } else if (desireShelf === 'Currently Reading') {
+      desireShelf = 'currentlyReading'
+    } else if (desireShelf === 'Read') {
+      desireShelf = 'read'
+    } else if (desireShelf === 'None') {
+      desireShelf = 'none'
+    }
+    console.log(desireShelf)
+
+    this.setState(state => ({
+      books: state.books.map((book) => {
+        if (book.id === bookToUpdate.id) {
+          book.shelf = desireShelf
+        }
+        return book
+      })
+    }))
+  }
+
   render() {
     return (
       <div className="app">
@@ -31,6 +57,7 @@ class App extends React.Component {
         <Route exact path="/" render={() => (
           <ShelvesComponent
             books={this.state.books}
+            changeBookShelf={this.changeBookShelf}
           />
         )}/>
         <Route path="/search" render={() => (
