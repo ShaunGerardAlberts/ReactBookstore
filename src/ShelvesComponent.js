@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
 class ShelvesComponent extends Component {
-    // proptypes here
+    static propTypes = {
+        books: PropTypes.array.isRequired
+    }
+
     render() {
         const { books } = this.props
         
@@ -22,7 +26,7 @@ class ShelvesComponent extends Component {
                   <div className="bookshelf-books">
                     <ol className="books-grid">
                       {currentlyReading.map((book) => (
-                          <li>
+                          <li key={ book.id }>
                             <div className="book">
                             <div className="book-top">
                                 <div className="book-cover" style={{ width: 128, height: 193, 
@@ -30,7 +34,7 @@ class ShelvesComponent extends Component {
                                 <div className="book-shelf-changer">
                                     <select>
                                         <option value="none" disabled>Move to...</option>
-                                        <option value="currentlyReading">Currently Reading</option>
+                                        <option value="currentlyReading" selected>Currently Reading</option>
                                         <option value="wantToRead">Want to Read</option>
                                         <option value="read">Read</option>
                                         <option value="none">None</option>
@@ -50,7 +54,7 @@ class ShelvesComponent extends Component {
                   <div className="bookshelf-books">
                     <ol className="books-grid">
                         {wantToRead.map((book) => (
-                            <li>
+                            <li key={ book.id }>
                                 <div className="book">
                                 <div className="book-top">
                                     <div className="book-cover" style={{ width: 128, height: 193, 
@@ -59,7 +63,7 @@ class ShelvesComponent extends Component {
                                         <select>
                                             <option value="none" disabled>Move to...</option>
                                             <option value="currentlyReading">Currently Reading</option>
-                                            <option value="wantToRead">Want to Read</option>
+                                            <option value="wantToRead" selected>Want to Read</option>
                                             <option value="read">Read</option>
                                             <option value="none">None</option>
                                         </select>
@@ -78,7 +82,7 @@ class ShelvesComponent extends Component {
                   <div className="bookshelf-books">
                     <ol className="books-grid">
                         {alreadyRead.map((book) => (
-                            <li>
+                            <li key={ book.id }>
                                 <div className="book">
                                 <div className="book-top">
                                     <div className="book-cover" style={{ width: 128, height: 193, 
@@ -88,7 +92,7 @@ class ShelvesComponent extends Component {
                                             <option value="none" disabled>Move to...</option>
                                             <option value="currentlyReading">Currently Reading</option>
                                             <option value="wantToRead">Want to Read</option>
-                                            <option value="read">Read</option>
+                                            <option value="read" selected>Read</option>
                                             <option value="none">None</option>
                                         </select>
                                     </div>

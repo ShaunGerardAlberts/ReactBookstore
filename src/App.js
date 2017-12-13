@@ -28,7 +28,6 @@ class App extends React.Component {
     return (
       <div className="app">
         {/* {JSON.stringify(this.state)} */}
-        <BooksComponent books={this.state.books} />
         <Route exact path="/" render={() => (
           <ShelvesComponent
             books={this.state.books}
@@ -36,6 +35,7 @@ class App extends React.Component {
         )}/>
         <Route path="/search" render={() => (
           <SearchComponent
+            books={this.state.books}
           />
         )}/>
         {/* {this.state.showSearchPage ? (
