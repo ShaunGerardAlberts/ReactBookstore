@@ -1,9 +1,10 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
-// import * as BooksAPI from './BooksAPI'
+import * as BooksAPI from './BooksAPI'
 import './App.css'
 import ShelvesComponent from './ShelvesComponent'
 import SearchComponent from './SearchComponent'
+import BooksComponent from './BooksComponent'
 
 class App extends React.Component {
   state = {
@@ -14,13 +15,23 @@ class App extends React.Component {
      * pages, as well as provide a good URL they can bookmark and share.
      */
     //showSearchPage: true
+    books: [ ]
+  }
+
+  componentDidMount() {
+    BooksAPI.getAll().then((books) => {
+      this.setState({ books })
+    })
   }
 
   render() {
     return (
       <div className="app">
+        {/* {JSON.stringify(this.state)} */}
+        <BooksComponent books={this.state.books} />
         <Route exact path="/" render={() => (
           <ShelvesComponent
+            books={this.state.books}
           />
         )}/>
         <Route path="/search" render={() => (
