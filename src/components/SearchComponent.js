@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import * as BooksAPI from './BooksAPI'
 import PropTypes from 'prop-types'
 
 class SearchComponent extends Component {
@@ -31,6 +30,10 @@ class SearchComponent extends Component {
         this.props.onPerformSearch(this.state.searchQuery)
       }
     }
+
+    handleBookAdd(book) {
+      
+    }
     
     render() {
         return (
@@ -53,7 +56,7 @@ class SearchComponent extends Component {
               <ol className="books-grid">
                 {this.props.searchBooks.map((book) => (
                   <li key={ book.id }>
-                    <div className="book">
+                    <div className="book" onClick={() => alert('click')}>
                     <div className="book-top">
                         <div className="book-cover" style={{ width: 128, height: 193, 
                             backgroundImage: `url(${book.imageLinks.thumbnail})`}}></div>
