@@ -31,8 +31,10 @@ class SearchComponent extends Component {
       }
     }
 
-    handleBookAdd(book) {
-      
+    handleAddBook = (book) => {
+      if (this.props.onAddBook) {
+        this.props.onAddBook(book)
+      }
     }
     
     render() {
@@ -56,7 +58,7 @@ class SearchComponent extends Component {
               <ol className="books-grid">
                 {this.props.searchBooks.map((book) => (
                   <li key={ book.id }>
-                    <div className="book" onClick={() => alert('click')}>
+                    <div className="book" onClick={() => this.handleAddBook(book)}>
                     <div className="book-top">
                         <div className="book-cover" style={{ width: 128, height: 193, 
                             backgroundImage: `url(${book.imageLinks.thumbnail})`}}></div>
