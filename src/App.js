@@ -8,22 +8,19 @@ import BooksComponent from './BooksComponent'
 
 class App extends React.Component {
   state = {
-    /**
-     * TODO: Instead of using this state variable to keep track of which page
-     * we're on, use the URL in the browser's address bar. This will ensure that
-     * users can use the browser's back and forward buttons to navigate between
-     * pages, as well as provide a good URL they can bookmark and share.
-     */
-    //showSearchPage: true
-    books: [ ]
+    books: [ ],
+    searchBooks: []
   }
 
   componentDidMount() {
     BooksAPI.getAll().then((books) => {
-      this.setState({ books })
+      this.setState({ 
+        books: books,
+        searchBooks: books 
+      })
     })
   }
-
+ 
   changeBookShelf = (bookChangeInfo) => {
     // console.log(`Book : ${bookChangeInfo.bookInfo.title} : Shelf : ${bookChangeInfo.shelf} `)
     
@@ -46,14 +43,34 @@ class App extends React.Component {
           book.shelf = desireShelf
         }
         return book
+      }),
+      searchBooks: state.books.map((book) => {
+        if (book.id === bookToUpdate.id) {
+          book.shelf = desireShelf
+        }
+        return book
       })
     }))
+  }
+
+  performSearch = (searchQuery) => {
+    BooksAPI.search(searchQuery).then((books) => {
+      if (books != undefined && !books.error) {
+        this.setState({
+          searchBooks: books
+        })
+      } else if (books.error) {
+        this.setState({
+          searchBooks: []
+        })
+      } 
+    })
   }
 
   render() {
     return (
       <div className="app">
-        {/* {JSON.stringify(this.state)} */}
+        {/* {JSON.stringify(this.state.books)} */}
         <Route exact path="/" render={() => (
           <ShelvesComponent
             books={this.state.books}
@@ -62,14 +79,11 @@ class App extends React.Component {
         )}/>
         <Route path="/search" render={() => (
           <SearchComponent
-            books={this.state.books}
+            searchBooks={this.state.searchBooks}
+            changeBookShelf={this.changeBookShelf}
+            onPerformSearch={this.performSearch}
           />
         )}/>
-        {/* {this.state.showSearchPage ? (
-          <SearchComponent/>
-        ) : (
-          <ShelvesComponent/>
-        )} */}
       </div>
     )
   }

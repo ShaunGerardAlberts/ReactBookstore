@@ -8,8 +8,6 @@ class ShelvesComponent extends Component {
     }
 
     handleShelfChange = (book) => {
-        //console.log(event.target.value)
-        //alert(srt)
         //buid up array of objects { contact: contact, desiredShelf: newShelf}
         //console.log(`Book : ${book.title} desiredShelf : ${desiredShelf}`)
         let selectObject = document.getElementById(`${book.id}`)
@@ -47,9 +45,9 @@ class ShelvesComponent extends Component {
                                 <div className="book-cover" style={{ width: 128, height: 193, 
                                     backgroundImage: `url(${book.imageLinks.thumbnail})`}}></div>
                                 <div className="book-shelf-changer">
-                                    <select id={book.id} onChange={() => this.handleShelfChange(book)}>
+                                    <select id={book.id} value={book.shelf} onChange={() => this.handleShelfChange(book)}>
                                         <option value="none" disabled>Move to...</option>
-                                        <option value="currentlyReading" selected>Currently Reading</option>
+                                        <option value="currentlyReading">Currently Reading</option>
                                         <option value="wantToRead">Want to Read</option>
                                         <option value="read">Read</option>
                                         <option value="none">None</option>
@@ -75,10 +73,10 @@ class ShelvesComponent extends Component {
                                     <div className="book-cover" style={{ width: 128, height: 193, 
                                         backgroundImage: `url(${book.imageLinks.thumbnail})`}}></div>
                                     <div className="book-shelf-changer">
-                                        <select>
+                                        <select id={book.id} value={book.shelf} onChange={() => this.handleShelfChange(book)}>
                                             <option value="none" disabled>Move to...</option>
                                             <option value="currentlyReading">Currently Reading</option>
-                                            <option value="wantToRead" selected>Want to Read</option>
+                                            <option value="wantToRead">Want to Read</option>
                                             <option value="read">Read</option>
                                             <option value="none">None</option>
                                         </select>
@@ -103,11 +101,11 @@ class ShelvesComponent extends Component {
                                     <div className="book-cover" style={{ width: 128, height: 193, 
                                         backgroundImage: `url(${book.imageLinks.thumbnail})`}}></div>
                                     <div className="book-shelf-changer">
-                                        <select>
+                                        <select id={book.id} value={book.shelf} onChange={() => this.handleShelfChange(book)}>
                                             <option value="none" disabled>Move to...</option>
                                             <option value="currentlyReading">Currently Reading</option>
                                             <option value="wantToRead">Want to Read</option>
-                                            <option value="read" selected>Read</option>
+                                            <option value="read">Read</option>
                                             <option value="none">None</option>
                                         </select>
                                     </div>
