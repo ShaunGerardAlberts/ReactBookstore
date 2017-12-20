@@ -36,10 +36,7 @@ class App extends React.Component {
       desireShelf = 'none'
     }
     // console.log(desireShelf)
-
-    
-
-    console.log(this.state.books)
+    // console.log(this.state.books)
     this.setState(state => ({
       books: state.books.map((book) => {
         if (book.id === bookToUpdate.id) {
@@ -60,129 +57,31 @@ class App extends React.Component {
   }
 
   performSearch = (searchQuery) => {
-    let stateBooks = this.state.books
-    let arrStateBooks = Object.values(stateBooks)
-    //console.log(`arrayStateBooks: ${arrStateBooks[0].id}`)
-    let count = 0;
     BooksAPI.search(searchQuery).then((returnedBooks) => {
-      returnedBooks.map((returnedBook, i) => {
-
-        this.state.searchBooks.map(stateSearchBook => {
-          if (stateSearchBook.id === returnedBook.id) {
-            // alert(`${returnedBook.id}`)
-            stateBooks.map(stateBook => {
-              if (stateBook.id === stateSearchBook.id) {
-                alert("get this id")
-              } else {
-                //alert("No one knows what you're asking")
-              }
-            })
-            // console.log(`stateSearchBook: ${stateSearchBook.shelf} :returnedBook ${returnedBook.shelf} `)
-          }
-        })
-         
-        // if (typeof book.shelf === "undefined") {
- 
-        //   // console.log("undefined")
-        //   // console.log(bk)
-
-        //   book.shelf = 'none'
-        //   BooksAPI.update(book, 'none')
-
-
-        // } 
-        //
-
-        
-
+      returnedBooks.map(book => {
+        if (typeof book.shelf === "undefined")  {
+          book.shelf = "none"
+        }
       })
-
-      //
-
-      // if (typeof currentBook[index] === "undefined") {
-      //   alert("tst")
-      // }
-            
-      // books are being returned, but the have no shelf key to them, this I dont know how to make this work.
-       if (returnedBooks !== undefined && !returnedBooks.error) {
-        //  alert("tst")
-      //   //update all the book.shelfs
-      //   returnedBooks.map((currentBook, index) => {
-      //     if (stateBooks[index] !== undefined && currentBook.id === stateBooks[index].id) {
-      //       currentBook.shelf = stateBooks[index].shelf
-      //       BooksAPI.update(currentBook, stateBooks[index].shelf)
-      //       this.stateBooks({
-      //         books
-      //       })
-      //     } else {
-      //       //add a attribute to the object 'shelf' and set it to 'none'
-      //     }
-
-      //     return currentBook
-      //   })
-        // this.setState({
-        //   searchBooks: books
-        // })
-        // this.setState(state => ({
-        //     books: returnedBooks.map((currentBook, index) => {
-        //     if (stateBooks[index] !== undefined && currentBook.id === stateBooks[index].id) {
-        //       //currentBook.shelf = stateBooks[index].shelf
-        //       stateBooks[index].shelf = currentBook.shelf
-        //       BooksAPI.update(stateBooks[index].shelf, currentBook.shelf)
-        //       return currentBook 
-        //     } else { //
-        //       return currentBook
-        //     }
-        //   })
-        // }))
-        this.setState({
-          // books: stateBooks.map((currentBook, index) => {
-          //   console.log("test")
-          //   if (stateBooks[index] !== undefined && currentBook.id === stateBooks[index].id) {
-          //     //currentBook.shelf = stateBooks[index].shelf
-          //     stateBooks[index].shelf = currentBook.shelf
-          //     console.log(`stateBook shelf: ${stateBooks[index].shelf}`)
-          //     console.log(`current Book: ${currentBook.shelf}`)
-          //     BooksAPI.update(stateBooks[index].shelf, currentBook.shelf)
-          //     return currentBook 
-          //   } else { //
-          //     return currentBook
-          //   }
-          // }),
-
-          searchBooks: returnedBooks 
-          // returnedBooks.map((currentBook, index) => {
-          //   // console.log(currentBook.id)
-          //   // console.log(arrStateBooks[index].id)
-            
-          //   if (typeof currentBook.shelf !== 'undefined') {
-          //     console.log("give a new shelf value of none")
-          //     // currentBook.shelf = "none"
-          //     // alert(currentBook.shelf)
-          //   }
-          //   stateBooks.map(stateBook => {
-          //     // console.log(stateBook)
-          //     if (currentBook.id === stateBook.id) {
-          //       console.log("update to correct shelf")
-          //       // alert(currentBook.id)
-          //       // alert(stateBook.shelf)
-          //       // currentBook.shelf = stateBook.shelf
-          //       // alert(currentBook.shelf)
-          //       //update
-          //     }
-          //     return currentBook
-          //   })
-            
-          // })
+      this.setState({
+        searchBooks: returnedBooks
+      }, () => {
+        // console.log(this.state.searchBooks)
+        this.state.searchBooks.map(book => {
+          this.state.books.forEach((currentStateBook) => {
+            this.setState(state => ({
+              searchBooks: state.searchBooks.map(searchBook => {
+                if (searchBook.title.trim() ===  currentStateBook.title.trim()) {
+                  // console.log('yes')
+                  searchBook.shelf = currentStateBook.shelf
+                }
+                return searchBook
+              })
+            }))
+          })
         })
-      } else if (returnedBooks.error) {
-        // console.log("test")
-        this.setState({
-          searchBooks: []
-        })
-      } 
-    })
-
+      })
+    }) 
   }
 
   addBook = (book) => {

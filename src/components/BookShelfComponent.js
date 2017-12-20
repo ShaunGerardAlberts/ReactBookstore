@@ -10,7 +10,6 @@ class BookShelfComponent extends Component {
     }
 
     handleShelfChange = (book) => {
-        console.log("Getting here")
         //buid up array of objects { contact: contact, desiredShelf: newShelf}
         //console.log(`Book : ${book.title} desiredShelf : ${desiredShelf}`)
         let selectObject = document.getElementById(`${book.id}`)
@@ -19,7 +18,7 @@ class BookShelfComponent extends Component {
 
         const updateInfo = { bookInfo: book, shelf: desiredShelf }
         if (this.props.bookShelfChange) {
-            console.log("Sending to ShelvesComponent")
+            // console.log("Sending to ShelvesComponent")
             this.props.bookShelfChange(updateInfo)
         }
     }

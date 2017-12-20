@@ -47,17 +47,6 @@ class ShelvesComponent extends Component {
 
     render() {
         const { books } = this.props
-
-        // console.log("Books : ", books)
-        // let newObj = Object.values(books)
-        // console.log('newObj ', newObj)
-
-        // console.log(books.typeof)
-        
-        // let currentlyReading = books.filter((book) => book.shelf === "currentlyReading" )
-        // let wantToRead = books.filter((book) => book.shelf === "wantToRead")
-        // let alreadyRead = books.filter((book) => book.shelf === "read")
-
         const shelves = [
             {
                 id: 'currentlyReading',
@@ -72,7 +61,7 @@ class ShelvesComponent extends Component {
             {
                 id: 'wantToRead',
                 title: 'Want to Read',
-                books: books.filter(book => book.shelf === 'none')
+                books: books.filter(book => book.shelf === 'wantToRead')
             }   
         ]
 
@@ -86,7 +75,6 @@ class ShelvesComponent extends Component {
                         {shelves.map(shelf => (
                             <BookShelfComponent id={shelf.id} title={shelf.title} displayBooks={ shelf.books } bookShelfChange={ this.handleShelfChange } />    
                         ))}
-
                     </div>
                 </div>
                 <div className="open-search">

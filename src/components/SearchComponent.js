@@ -4,9 +4,11 @@ import PropTypes from 'prop-types'
 
 class SearchComponent extends Component {
     static propTypes = {
-        books: PropTypes.array.isRequired
+      searchBooks: PropTypes.array.isRequired,
+      changeBookShelf: PropTypes.func.isRequired,
+      onPerformSearch: PropTypes.func.isRequired
     }
-
+    
     state = {
       searchQuery: ''
     }
