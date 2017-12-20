@@ -1,22 +1,17 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import BookShelfComponent from './BookShelfComponent'
 
 class ShelvesComponent extends Component {
-    // static propTypes = {
-    //     books: PropTypes.array.isRequired
-    // }
+    static propTypes = {
+        books: PropTypes.array.isRequired,
+        changeBookShelf: PropTypes.func.isRequired
+    }
 
-    handleShelfChange = (book) => {
-        //buid up array of objects { contact: contact, desiredShelf: newShelf}
-        //console.log(`Book : ${book.title} desiredShelf : ${desiredShelf}`)
-        let selectObject = document.getElementById(`${book.id}`)
-        let desiredShelf  = selectObject.options[selectObject.selectedIndex].text
-        //alert(desiredShelf)
-
-        const updateInfo = { bookInfo: book, shelf: desiredShelf }
+    handleShelfChange = (shelfUpdate) => {
         if (this.props.changeBookShelf) {
-            this.props.changeBookShelf(updateInfo)
+            this.props.changeBookShelf(shelfUpdate)
         }
     }
 
@@ -53,42 +48,52 @@ class ShelvesComponent extends Component {
     render() {
         const { books } = this.props
 
-        console.log("Books : ", books)
-        let newObj = Object.values(books)
-        console.log('newObj ', newObj)
+        // console.log("Books : ", books)
+        // let newObj = Object.values(books)
+        // console.log('newObj ', newObj)
 
-        console.log(books.typeof)
+        // console.log(books.typeof)
         
-        let currentlyReading = books.filter((book) => book.shelf === "currentlyReading" )
-        let wantToRead = books.filter((book) => book.shelf === "wantToRead")
-        let alreadyRead = books.filter((book) => book.shelf === "read")
+        // let currentlyReading = books.filter((book) => book.shelf === "currentlyReading" )
+        // let wantToRead = books.filter((book) => book.shelf === "wantToRead")
+        // let alreadyRead = books.filter((book) => book.shelf === "read")
+
+        const shelves = [
+            {
+                id: 'currentlyReading',
+                title: 'Currently Reading',
+                books: books.filter(book => book.shelf === 'currentlyReading')
+            },
+            {
+                id: 'read',
+                title: 'Read',
+                books: books.filter(book => book.shelf === 'read')
+            },
+            {
+                id: 'wantToRead',
+                title: 'Want to Read',
+                books: books.filter(book => book.shelf === 'none')
+            }   
+        ]
 
         return (
             <div className="list-books">
-            <div className="list-books-title">
-              <h1>MyReads</h1>
-            </div>
-            <div className="list-books-content">
-              <div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Currently Reading</h2>
-                    {this.renderShelf(currentlyReading)}
+                <div className="list-books-title">
+                    <h1>MyReads</h1>
                 </div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Want to Read</h2>
-                  {this.renderShelf(wantToRead)}
+                <div className="list-books-content">
+                    <div>
+                        {shelves.map(shelf => (
+                            <BookShelfComponent id={shelf.id} title={shelf.title} displayBooks={ shelf.books } bookShelfChange={ this.handleShelfChange } />    
+                        ))}
+
+                    </div>
                 </div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Read</h2>
-                  {this.renderShelf(alreadyRead)}
+                <div className="open-search">
+                <Link
+                    to="/search"
+                >Add a book</Link>
                 </div>
-              </div>
-            </div>
-            <div className="open-search">
-              <Link
-                to="/search"
-              >Add a book</Link>
-            </div>
           </div>
         )
     }

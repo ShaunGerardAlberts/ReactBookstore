@@ -24,11 +24,19 @@ class SearchComponent extends Component {
     performSearch(searchQuery) {
       this.setState({
         searchQuery: searchQuery.trim()
+      }, () => {
+        if (this.state.searchQuery && this.props.onPerformSearch) {
+          this.props.onPerformSearch(this.state.searchQuery)
+        }
       })
 
-      if (this.state.searchQuery && this.props.onPerformSearch) {
-        this.props.onPerformSearch(this.state.searchQuery)
-      }
+      // this.setState(state => ({
+      //   searchQuery: searchQuery.trim()
+      // }))
+
+      // if (this.state.searchQuery && this.props.onPerformSearch) {
+      //   this.props.onPerformSearch(this.state.searchQuery)
+      // }
     }
 
     handleAddBook = (book) => {
