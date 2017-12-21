@@ -20,7 +20,7 @@ const BookShelfComponent = (props) => {
             <ol className="books-grid">
             {displayBooks.map((book) => {
                 if (book.imageLinks === undefined) {
-                    bookURL = 'http://books.google.com/books/content?id=nggnmAEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api'
+                    bookURL = 'https://onlinebookclub.org/book-covers/no-cover.jpg'
                 } else {
                     bookURL = book.imageLinks.thumbnail
                 }
