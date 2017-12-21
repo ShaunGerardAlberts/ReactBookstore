@@ -35,8 +35,6 @@ class App extends React.Component {
     } else if (desireShelf === 'None') {
       desireShelf = 'none'
     }
-    // console.log(desireShelf)
-    // console.log(this.state.books)
     this.setState(state => ({
       books: state.books.map((book) => {
         if (book.id === bookToUpdate.id) {
@@ -82,7 +80,7 @@ class App extends React.Component {
             }))
           })
         })
-      } else { // error
+      } else { // account for error response from server
         this.setState(state => {
           
         }, () => {

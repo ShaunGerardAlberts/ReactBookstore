@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import { Debounce } from 'react-throttle';
 
 class SearchComponent extends Component {
     static propTypes = {
@@ -13,10 +14,7 @@ class SearchComponent extends Component {
       searchQuery: ''
     }
 
-    handleShelfChange = (book) => {
-      let selectObject = document.getElementById(`${book.id}`)
-      let desiredShelf  = selectObject.options[selectObject.selectedIndex].text
-
+    handleShelfChange = (book, desiredShelf) => {
       const updateInfo = { bookInfo: book, shelf: desiredShelf }
       if (this.props.changeBookShelf) {
           this.props.changeBookShelf(updateInfo)
@@ -31,14 +29,6 @@ class SearchComponent extends Component {
           this.props.onPerformSearch(this.state.searchQuery)
         }
       })
-
-      // this.setState(state => ({
-      //   searchQuery: searchQuery.trim()
-      // }))
-
-      // if (this.state.searchQuery && this.props.onPerformSearch) {
-      //   this.props.onPerformSearch(this.state.searchQuery)
-      // }
     }
 
     handleAddBook = (book) => {
@@ -56,12 +46,13 @@ class SearchComponent extends Component {
                 className="close-search"
               >Close</Link>
               <div className="search-books-input-wrapper">
-                <input 
-                  type="text" 
-                  placeholder="Search by title or author"
-                  onChange={(event) => this.performSearch(event.target.value)}  
-                />
-
+                <Debounce time="400" handler="onChange">
+                  <input 
+                    type="text" 
+                    placeholder="Search by title or author"
+                    onChange={(event) => this.performSearch(event.target.value)}  
+                  />
+                </Debounce>
               </div>
             </div>
             <div className="search-books-results">
@@ -73,7 +64,7 @@ class SearchComponent extends Component {
                         <div className="book-cover" style={{ width: 128, height: 193, 
                             backgroundImage: `url(${book.imageLinks.thumbnail})`}}></div>
                         <div className="book-shelf-changer">
-                            <select id={book.id} value={book.shelf} onChange={() => this.handleShelfChange(book)}>
+                            <select id={book.id} value={book.shelf} onChange={(event) => this.handleShelfChange(book, event.target.value)}>
                                 <option value="none" disabled>Move to...</option>
                                 <option value="currentlyReading">Currently Reading</option>
                                 <option value="wantToRead">Want to Read</option>
