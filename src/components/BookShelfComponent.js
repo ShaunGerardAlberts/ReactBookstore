@@ -11,14 +11,11 @@ class BookShelfComponent extends Component {
 
     handleShelfChange = (book) => {
         //buid up array of objects { contact: contact, desiredShelf: newShelf}
-        //console.log(`Book : ${book.title} desiredShelf : ${desiredShelf}`)
         let selectObject = document.getElementById(`${book.id}`)
         let desiredShelf  = selectObject.options[selectObject.selectedIndex].text
-        //alert(desiredShelf)
 
         const updateInfo = { bookInfo: book, shelf: desiredShelf }
         if (this.props.bookShelfChange) {
-            // console.log("Sending to ShelvesComponent")
             this.props.bookShelfChange(updateInfo)
         }
     }

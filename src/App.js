@@ -8,7 +8,7 @@ import BooksComponent from './BooksComponent'
 
 class App extends React.Component {
   state = {
-    books: [ ],
+    books: [],
     searchBooks: []
   }
 
@@ -53,26 +53,28 @@ class App extends React.Component {
         return book
       })
     }))
-
+    // update back-end
+    BooksAPI.update(bookToUpdate, desireShelf)
   }
 
   performSearch = (searchQuery) => {
     BooksAPI.search(searchQuery).then((returnedBooks) => {
-      returnedBooks.map(book => {
-        if (typeof book.shelf === "undefined")  {
-          book.shelf = "none"
-        }
-      })
-      this.setState({
-        searchBooks: returnedBooks
-      }, () => {
-        // console.log(this.state.searchBooks)
-        this.state.searchBooks.map(book => {
+      if (!returnedBooks.error) {
+        // if the returnedBook doesnt have a shelf property, create and default to 'undefined'
+        returnedBooks.map(book => {
+          if (typeof book.shelf === "undefined")  {
+            book.shelf = "none"
+          }
+        })
+        // now save the updates returnedBook to components state
+        this.setState({
+          searchBooks: returnedBooks
+        }, () => { // we want to use that state, so use setStates callback function
+          // go through every book in the books state
           this.state.books.forEach((currentStateBook) => {
             this.setState(state => ({
               searchBooks: state.searchBooks.map(searchBook => {
                 if (searchBook.title.trim() ===  currentStateBook.title.trim()) {
-                  // console.log('yes')
                   searchBook.shelf = currentStateBook.shelf
                 }
                 return searchBook
@@ -80,7 +82,15 @@ class App extends React.Component {
             }))
           })
         })
-      })
+      } else { // error
+        this.setState(state => {
+          
+        }, () => {
+          this.setState({
+            searchBooks: []
+          })
+        })
+      } 
     }) 
   }
 
