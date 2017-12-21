@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import BookShelfComponent from './BookShelfComponent'
@@ -36,7 +36,7 @@ const ShelvesComponent = (props) => {
             <div className="list-books-content">
                 <div>
                     {shelves.map(shelf => (
-                        <BookShelfComponent id={shelf.id} title={shelf.title} displayBooks={ shelf.books } bookShelfChange={ handleShelfChange } />    
+                        <BookShelfComponent key={shelf.id} id={shelf.id} title={shelf.title} displayBooks={ shelf.books } bookShelfChange={ handleShelfChange } />    
                     ))}
                 </div>
             </div>

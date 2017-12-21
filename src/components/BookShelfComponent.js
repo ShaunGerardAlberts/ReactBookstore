@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
 const BookShelfComponent = (props) => {
@@ -19,7 +19,7 @@ const BookShelfComponent = (props) => {
             <div className="bookshelf-books">
             <ol className="books-grid">
             {displayBooks.map((book) => {
-                if (book.imageLinks.thumbnail === 'undefined') {
+                if (book.imageLinks === 'undefined') {
                     bookURL = 'http://books.google.com/books/content?id=nggnmAEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api'
                 } else {
                     bookURL = book.imageLinks.thumbnail
@@ -41,7 +41,7 @@ const BookShelfComponent = (props) => {
                             </div>
                         </div>
                         <div className="book-title">{ book.title }</div>
-                        <div className="book-authors">{ book.authors }</div>
+                        <div className="book-authors">{ book.authors ? book.authors.join(', ') : '' }</div>
                         </div>
                     </li>
                 )

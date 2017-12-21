@@ -1,10 +1,10 @@
 import React from 'react'
-import { Route } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
 import './App.css'
 import ShelvesComponent from './components/ShelvesComponent'
 import SearchComponent from './components/SearchComponent'
-import BooksComponent from './BooksComponent'
+import ErrorComponent from './components/ErrorComponent'
 
 class App extends React.Component {
   state = {
@@ -22,8 +22,6 @@ class App extends React.Component {
   }
 
   changeBookShelf = (bookChangeInfo) => {
-    // console.log(`Book : ${bookChangeInfo.bookInfo.title} : Shelf : ${bookChangeInfo.shelf} `)
-
     let bookToUpdate = bookChangeInfo.bookInfo
     let desireShelf = bookChangeInfo.shelf
     if (desireShelf === 'Want to Read') {
@@ -60,7 +58,7 @@ class App extends React.Component {
       BooksAPI.search(searchQuery).then((returnedBooks) => {
         if (!returnedBooks.error) {
           // if the returnedBook doesnt have a shelf property, create and default to 'undefined'
-          returnedBooks.map(book => {
+          returnedBooks.forEach(book => {
             if (typeof book.shelf === "undefined") {
               book.shelf = "none"
             }
@@ -73,7 +71,7 @@ class App extends React.Component {
             this.state.books.forEach((currentStateBook) => {
               this.setState(state => ({
                 searchBooks: state.searchBooks.map(searchBook => {
-                  if (searchBook.title.trim() === currentStateBook.title.trim()) {
+                  if (searchBook.id === currentStateBook.id) {
                     searchBook.shelf = currentStateBook.shelf
                   }
                   return searchBook
@@ -82,13 +80,9 @@ class App extends React.Component {
             })
           })
         } else { // account for error response from server
-          this.setState(state => {
-
-          }, () => {
-            this.setState({
-              searchBooks: []
-            })
-          })
+          this.setState(state => ({
+            searchBooks: []
+          }))
         }
       })
     } else {
@@ -119,21 +113,23 @@ class App extends React.Component {
   render() {
     return (
       <div className="app">
-        {/* {JSON.stringify(this.state.books)} */}
-        <Route exact path="/" render={() => (
-          <ShelvesComponent
-            books={this.state.books}
-            changeBookShelf={this.changeBookShelf}
-          />
-        )} />
-        <Route path="/search" render={() => (
-          <SearchComponent
-            searchBooks={this.state.searchBooks}
-            changeBookShelf={this.changeBookShelf}
-            onPerformSearch={this.performSearch}
-            onAddBook={this.addBook}
-          />
-        )} />
+        <Switch>
+          <Route exact path="/" render={() => (
+            <ShelvesComponent
+              books={this.state.books}
+              changeBookShelf={this.changeBookShelf}
+            />
+          )} />
+          <Route path="/search" render={() => (
+            <SearchComponent
+              searchBooks={this.state.searchBooks}
+              changeBookShelf={this.changeBookShelf}
+              onPerformSearch={this.performSearch}
+              onAddBook={this.addBook}
+            />
+          )} />
+          <Route component={ErrorComponent} />
+        </Switch>
       </div>
     )
   }
