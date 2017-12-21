@@ -62,7 +62,7 @@ class SearchComponent extends Component {
         <div className="search-books-results">
           <ol className="books-grid">
             {this.props.searchBooks.map((book) => {
-              if (book.imageLinks === 'undefined') {
+              if (book.imageLinks === undefined) {
                 bookURL = 'http://books.google.com/books/content?id=nggnmAEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api'
               } else {
                 bookURL = book.imageLinks.thumbnail

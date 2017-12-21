@@ -19,7 +19,7 @@ const BookShelfComponent = (props) => {
             <div className="bookshelf-books">
             <ol className="books-grid">
             {displayBooks.map((book) => {
-                if (book.imageLinks === 'undefined') {
+                if (book.imageLinks === undefined) {
                     bookURL = 'http://books.google.com/books/content?id=nggnmAEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api'
                 } else {
                     bookURL = book.imageLinks.thumbnail
