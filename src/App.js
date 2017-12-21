@@ -14,16 +14,16 @@ class App extends React.Component {
 
   componentDidMount() {
     BooksAPI.getAll().then((books) => {
-      this.setState({ 
+      this.setState({
         books: books,
-        searchBooks: books 
+        searchBooks: books
       })
     })
   }
- 
+
   changeBookShelf = (bookChangeInfo) => {
     // console.log(`Book : ${bookChangeInfo.bookInfo.title} : Shelf : ${bookChangeInfo.shelf} `)
-    
+
     let bookToUpdate = bookChangeInfo.bookInfo
     let desireShelf = bookChangeInfo.shelf
     if (desireShelf === 'Want to Read') {
@@ -56,40 +56,46 @@ class App extends React.Component {
   }
 
   performSearch = (searchQuery) => {
-    BooksAPI.search(searchQuery).then((returnedBooks) => {
-      if (!returnedBooks.error) {
-        // if the returnedBook doesnt have a shelf property, create and default to 'undefined'
-        returnedBooks.map(book => {
-          if (typeof book.shelf === "undefined")  {
-            book.shelf = "none"
-          }
-        })
-        // now save the updates returnedBook to components state
-        this.setState({
-          searchBooks: returnedBooks
-        }, () => { // we want to use that state, so use setStates callback function
-          // go through every book in the books state
-          this.state.books.forEach((currentStateBook) => {
-            this.setState(state => ({
-              searchBooks: state.searchBooks.map(searchBook => {
-                if (searchBook.title.trim() ===  currentStateBook.title.trim()) {
-                  searchBook.shelf = currentStateBook.shelf
-                }
-                return searchBook
-              })
-            }))
+    if (searchQuery !== "blankSearch") {
+      BooksAPI.search(searchQuery).then((returnedBooks) => {
+        if (!returnedBooks.error) {
+          // if the returnedBook doesnt have a shelf property, create and default to 'undefined'
+          returnedBooks.map(book => {
+            if (typeof book.shelf === "undefined") {
+              book.shelf = "none"
+            }
           })
-        })
-      } else { // account for error response from server
-        this.setState(state => {
-          
-        }, () => {
+          // now save the updates returnedBook to components state
           this.setState({
-            searchBooks: []
+            searchBooks: returnedBooks
+          }, () => { // we want to use that state, so use setStates callback function
+            // go through every book in the books state
+            this.state.books.forEach((currentStateBook) => {
+              this.setState(state => ({
+                searchBooks: state.searchBooks.map(searchBook => {
+                  if (searchBook.title.trim() === currentStateBook.title.trim()) {
+                    searchBook.shelf = currentStateBook.shelf
+                  }
+                  return searchBook
+                })
+              }))
+            })
           })
-        })
-      } 
-    }) 
+        } else { // account for error response from server
+          this.setState(state => {
+
+          }, () => {
+            this.setState({
+              searchBooks: []
+            })
+          })
+        }
+      })
+    } else {
+      this.setState({
+        searchBooks: []
+      })
+    }
   }
 
   addBook = (book) => {
@@ -119,7 +125,7 @@ class App extends React.Component {
             books={this.state.books}
             changeBookShelf={this.changeBookShelf}
           />
-        )}/>
+        )} />
         <Route path="/search" render={() => (
           <SearchComponent
             searchBooks={this.state.searchBooks}
@@ -127,7 +133,7 @@ class App extends React.Component {
             onPerformSearch={this.performSearch}
             onAddBook={this.addBook}
           />
-        )}/>
+        )} />
       </div>
     )
   }

@@ -21,7 +21,10 @@ class SearchComponent extends Component {
       }
     }
 
-    performSearch(searchQuery) {
+    performSearch = (searchQuery) => {
+      if (searchQuery.length === 0) {
+        searchQuery = "blankSearch"
+      }
       this.setState({
         searchQuery: searchQuery.trim()
       }, () => {
