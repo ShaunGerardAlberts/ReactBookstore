@@ -110,24 +110,6 @@ class App extends React.Component {
     }
   }
 
-  addBook = (book) => {
-    let { books } = this.state
-    let bookExists = false;
-
-    for (let i = 0; i < books.length; i++) {
-      if (books[i].id === book.id) {
-        bookExists = true
-        break
-      }
-    }
-    //book does not exist so add it to state of books
-    if (!bookExists) {
-      this.setState(state => ({
-        books: books.concat([book])
-      }))
-    }
-  }
-
   render() {
     return (
       <div className="app">
@@ -143,7 +125,6 @@ class App extends React.Component {
               searchBooks={this.state.searchBooks}
               changeBookShelf={this.changeBookShelf}
               onPerformSearch={this.performSearch}
-              onAddBook={this.addBook}
             />
           )} />
           <Route component={ErrorComponent} />
