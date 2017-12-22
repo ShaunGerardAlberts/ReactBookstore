@@ -33,24 +33,45 @@ class App extends React.Component {
     } else if (desireShelf === 'None') {
       desireShelf = 'none'
     }
-    this.setState(state => ({
-      books: state.books.map((book) => {
-        if (book.id === bookToUpdate.id) {
-          book.shelf = desireShelf
-        }
-        return book
+
+    let addNewBook = true
+    this.state.books.forEach(book => {
+      if (book.id === bookToUpdate.id) {
+        addNewBook = false
+      }
+    })
+
+    if (addNewBook) {
+      this.setState(state => ({
+        books: state.books.concat(bookToUpdate)
+      }))
+    }
+
+    // update with change in front-end and back-end
+    BooksAPI.update(bookToUpdate, desireShelf).then(() => {
+      this.setState(state => ({
+        books: state.books.map((book) => {
+          if (book.id === bookToUpdate.id) {
+            book.shelf = desireShelf
+          }
+          return book
+        })
+      }))
+      this.setState(state => ({
+        searchBooks: state.books.map((book) => {
+          if (book.id === bookToUpdate.id) {
+            book.shelf = desireShelf
+          }
+          return book
+        })
+      }))
+    })
+    .catch( // if error remove change from front-end
+      this.setState(state => {
+        books: state.books.filter(book => book.id !== bookToUpdate)
       })
-    }))
-    this.setState(state => ({
-      searchBooks: state.books.map((book) => {
-        if (book.id === bookToUpdate.id) {
-          book.shelf = desireShelf
-        }
-        return book
-      })
-    }))
-    // update back-end
-    BooksAPI.update(bookToUpdate, desireShelf)
+    )
+
   }
 
   performSearch = (searchQuery) => {
@@ -63,21 +84,18 @@ class App extends React.Component {
               book.shelf = "none"
             }
           })
-          // now save the updates returnedBook to components state
+          //want to reconcile shelf of books to shelf of returned books, so iterate over every returnedBook
+          returnedBooks.forEach((returnedBook) => {
+            //go through every book in state.book, where appropriate ensure returnedBook.shelf = stateBook.shelf
+            this.state.books.forEach((stateBook) => {
+              if (returnedBook.id === stateBook.id) {
+                returnedBook.shelf = stateBook.shelf
+              }
+            })
+          })
+          //now returedBooks shelf should match state.book shelf values
           this.setState({
             searchBooks: returnedBooks
-          }, () => { // we want to use that state, so use setStates callback function
-            // go through every book in the books state
-            this.state.books.forEach((currentStateBook) => {
-              this.setState(state => ({
-                searchBooks: state.searchBooks.map(searchBook => {
-                  if (searchBook.id === currentStateBook.id) {
-                    searchBook.shelf = currentStateBook.shelf
-                  }
-                  return searchBook
-                })
-              }))
-            })
           })
         } else { // account for error response from server
           this.setState(state => ({

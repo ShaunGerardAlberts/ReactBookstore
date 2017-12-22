@@ -45,7 +45,6 @@ const BookComponent = (props) => {
 }
 
 BookComponent.propTypes = {
-    key: PropTypes.string.isRequired,
     book: PropTypes.object.isRequired,
     shelfChange: PropTypes.func.isRequired
 }
